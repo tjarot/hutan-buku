@@ -11,8 +11,8 @@ class AdminMiddleware
     {
         if (!$request->user() || !$request->user()->isAdmin()) {
             return response()->json([
-                'success' => false,
-                'message' => 'Akses ditolak. Hanya admin yang dapat mengakses.'
+                'sukses' => false,
+                'pesan' => 'Akses ditolak. Hanya admin yang dapat mengakses.'
             ], 403);
         }
 

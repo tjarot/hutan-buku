@@ -8,20 +8,20 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
+        Schema::create('token_akses_personal', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
-            $table->string('name');
+            $table->morphs('dapat_di_token');
+            $table->string('nama');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('terakhir_digunakan_pada')->nullable();
+            $table->timestamp('kadaluarsa_pada')->nullable();
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('token_akses_personal');
     }
 };

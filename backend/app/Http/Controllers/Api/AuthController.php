@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,40 +11,40 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function daftar(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:pengguna',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
+                'sukses' => false,
+                'error' => $validator->errors()
             ], 422);
         }
 
-        $user = User::create([
-            'name' => $request->name,
+        $pengguna = Pengguna::create([
+            'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user'
+            'peran' => 'pengguna'
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $pengguna->createToken('token_autentikasi')->plainTextToken;
 
         return response()->json([
-            'success' => true,
-            'message' => 'Registrasi berhasil!',
-            'user' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'
+            'sukses' => true,
+            'pesan' => 'Registrasi berhasil!',
+            'pengguna' => $pengguna,
+            'token_akses' => $token,
+            'tipe_token' => 'Bearer'
         ], 201);
     }
 
-    public function login(Request $request)
+    public function masuk(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -53,71 +53,71 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
+                'sukses' => false,
+                'error' => $validator->errors()
             ], 422);
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'success' => false,
-                'message' => 'Email atau password salah'
+                'sukses' => false,
+                'pesan' => 'Email atau password salah'
             ], 401);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $pengguna = Auth::user();
+        $token = $pengguna->createToken('token_autentikasi')->plainTextToken;
 
         return response()->json([
-            'success' => true,
-            'message' => 'Login berhasil',
-            'user' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer'
+            'sukses' => true,
+            'pesan' => 'Login berhasil',
+            'pengguna' => $pengguna,
+            'token_akses' => $token,
+            'tipe_token' => 'Bearer'
         ]);
     }
 
-    public function logout(Request $request)
+    public function keluar(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'success' => true,
-            'message' => 'Logout berhasil'
+            'sukses' => true,
+            'pesan' => 'Logout berhasil'
         ]);
     }
 
-    public function user(Request $request)
+    public function pengguna(Request $request)
     {
         return response()->json([
-            'success' => true,
-            'user' => $request->user()
+            'sukses' => true,
+            'pengguna' => $request->user()
         ]);
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfil(Request $request)
     {
-        $user = $request->user();
+        $pengguna = $request->user();
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'nama' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:pengguna,email,' . $pengguna->id,
             'bio' => 'nullable|string|max:500'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
+                'sukses' => false,
+                'error' => $validator->errors()
             ], 422);
         }
 
-        $user->update($request->only('name', 'email', 'bio'));
+        $pengguna->update($request->only('nama', 'email', 'bio'));
 
         return response()->json([
-            'success' => true,
-            'message' => 'Profil berhasil diperbarui',
-            'user' => $user
+            'sukses' => true,
+            'pesan' => 'Profil berhasil diperbarui',
+            'pengguna' => $pengguna
         ]);
     }
 }

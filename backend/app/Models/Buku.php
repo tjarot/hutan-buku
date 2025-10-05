@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
+class Buku extends Model
 {
     use HasFactory;
+
+    protected $table = 'buku';
 
     protected $fillable = [
         'judul',
@@ -22,19 +24,19 @@ class Book extends Model
         'rating',
         'total_rating',
         'stok',
-        'cover',
+        'sampul',
         'warna',
         'bahasa',
         'berat',
         'dimensi',
         'halaman_berwarna',
         'fitur',
-        'bab'
+        'daftar_bab'
     ];
 
     protected $casts = [
         'fitur' => 'array',
-        'bab' => 'array',
+        'daftar_bab' => 'array',
         'halaman_berwarna' => 'boolean',
         'tahun_terbit' => 'integer',
         'jumlah_halaman' => 'integer',
@@ -43,24 +45,24 @@ class Book extends Model
         'total_rating' => 'integer'
     ];
 
-    public function scopeSearch($query, $search)
+    public function scopePencarian($query, $pencarian)
     {
-        return $query->where('judul', 'like', "%{$search}%")
-                    ->orWhere('penulis', 'like', "%{$search}%")
-                    ->orWhere('penerbit', 'like', "%{$search}%");
+        return $query->where('judul', 'like', "%{$pencarian}%")
+                    ->orWhere('penulis', 'like', "%{$pencarian}%")
+                    ->orWhere('penerbit', 'like', "%{$pencarian}%");
     }
 
-    public function scopeByCategory($query, $category)
+    public function scopeBerdasarkanKategori($query, $kategori)
     {
-        if ($category && $category !== 'Semua') {
-            return $query->where('kategori', $category);
+        if ($kategori && $kategori !== 'Semua') {
+            return $query->where('kategori', $kategori);
         }
         return $query;
     }
 
-    public function scopeSorted($query, $sortBy)
+    public function scopeDiurutkan($query, $urutBerdasarkan)
     {
-        switch ($sortBy) {
+        switch ($urutBerdasarkan) {
             case 'terbaru':
                 return $query->orderBy('tahun_terbit', 'desc');
             case 'terlama':

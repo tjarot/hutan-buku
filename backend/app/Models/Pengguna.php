@@ -7,16 +7,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Pengguna extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'pengguna';
+
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'password',
-        'role',
-        'avatar',
+        'peran',
+        'foto_profil',
         'bio'
     ];
 
@@ -26,16 +28,21 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_terverifikasi_pada' => 'datetime',
     ];
 
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->peran === 'admin';
     }
 
-    public function isUser()
+    public function isPengguna()
     {
-        return $this->role === 'user';
+        return $this->peran === 'pengguna';
+    }
+
+    public function getAuthPasswordName()
+    {
+        return 'password';
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Book;
-use App\Models\User;
+use App\Models\Buku;
+use App\Models\Pengguna;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,24 +11,24 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Create admin user
-        User::create([
-            'name' => 'Administrator',
+        // Buat admin
+        Pengguna::create([
+            'nama' => 'Administrator',
             'email' => 'admin@hutanbuku.com',
             'password' => Hash::make('admin123'),
-            'role' => 'admin'
+            'peran' => 'admin'
         ]);
 
-        // Create sample user
-        User::create([
-            'name' => 'User Demo',
-            'email' => 'user@hutanbuku.com',
-            'password' => Hash::make('user123'),
-            'role' => 'user'
+        // Buat pengguna contoh
+        Pengguna::create([
+            'nama' => 'Pengguna Demo',
+            'email' => 'pengguna@hutanbuku.com',
+            'password' => Hash::make('pengguna123'),
+            'peran' => 'pengguna'
         ]);
 
-        // Sample books
-        $books = [
+        // Data buku contoh
+        $buku = [
             [
                 'judul' => 'Belajar React JS Modern',
                 'isbn' => '9781234567891',
@@ -42,14 +42,14 @@ class DatabaseSeeder extends Seeder
                 'rating' => 4.8,
                 'total_rating' => 124,
                 'stok' => 15,
-                'cover' => '📚',
+                'sampul' => '📚',
                 'warna' => '#3498db',
                 'bahasa' => 'Indonesia',
                 'berat' => 500,
                 'dimensi' => '15x23 cm',
                 'halaman_berwarna' => true,
                 'fitur' => ['Full Color', 'Source Code', 'Video Tutorial', 'Project Based'],
-                'bab' => [
+                'daftar_bab' => [
                     ['judul' => 'Pengenalan React JS', 'halaman' => 1],
                     ['judul' => 'Components dan Props', 'halaman' => 25],
                     ['judul' => 'State dan Lifecycle', 'halaman' => 50]
@@ -68,35 +68,18 @@ class DatabaseSeeder extends Seeder
                 'rating' => 4.7,
                 'total_rating' => 89,
                 'stok' => 8,
-                'cover' => '🚀',
+                'sampul' => '🚀',
                 'warna' => '#e74c3c',
                 'bahasa' => 'Indonesia',
                 'berat' => 600,
                 'dimensi' => '16x24 cm',
                 'halaman_berwarna' => false,
                 'fitur' => ['Source Code', 'Database Examples', 'API Development']
-            ],
-            [
-                'judul' => 'JavaScript Modern ES6+',
-                'isbn' => '9781234567893',
-                'penerbit' => 'Tech Books',
-                'penulis' => 'Siti Web Developer',
-                'tahun_terbit' => 2023,
-                'jumlah_halaman' => 300,
-                'sinopsis' => 'Belajar JavaScript modern dengan ES6+ dan konsep pemrograman terbaru.',
-                'kategori' => 'Pemrograman',
-                'subkategori' => 'Web Development',
-                'rating' => 4.6,
-                'total_rating' => 67,
-                'stok' => 12,
-                'cover' => '⚡',
-                'warna' => '#f39c12',
-                'bahasa' => 'Indonesia'
             ]
         ];
 
-        foreach ($books as $book) {
-            Book::create($book);
+        foreach ($buku as $dataBuku) {
+            Buku::create($dataBuku);
         }
     }
 }
